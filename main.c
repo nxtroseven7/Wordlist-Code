@@ -1,7 +1,5 @@
-#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 
 void clearScreen() {
@@ -12,9 +10,10 @@ void clearScreen() {
     #endif
 }
 
-uint16_t ScanningValue(uint16_t value){
-    bool Checker;
-    
+uint16_t ScanningValue(){
+    int Checker;
+    uint16_t value;
+
     do{
        Checker = scanf("%hu", &value);
        if(Checker != 1){
@@ -26,7 +25,12 @@ uint16_t ScanningValue(uint16_t value){
 
 int main(){
     uint16_t size_list;
-    FILE *file = fopen("wordlist.txt", "r");
+    FILE *file = fopen("wordlist.txt", "w");
+
+    if(file == 0){
+        perror("Error in creating the file!");
+        return 1;
+    }
 
     printf("Welcome to the WordList Program, press Enter to Begin :");
     getchar();
@@ -34,12 +38,13 @@ int main(){
 
     printf("Enter the value of the where you want your Wordlist to begin\n");
 
-    ScanningValue(size_list);
+    size_list = ScanningValue();
 
     
     for(int i=0;i<size_list;i++){
         fprintf(file, "%0*d\n", size_list, i);
     }
+    fclose(file);
 
     printf("File created successfully !");
 
